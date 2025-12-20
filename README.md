@@ -71,3 +71,7 @@ The system works in two main stages:
 ├── app.py                 # Flask entry point
 └── README.md
 ```
+---
+
+## 🏗️ INTERFACE
+
