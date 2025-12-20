@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediksi Penyakit Sapi</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🐄 Aplikasi Prediksi Penyakit Sapi</h1>
+      <center>
+        <form method="post" enctype="multipart/form-data">
+          <label class="file-label" for="imageInput"
+            >📷 Pilih Gambar Luka</label
+          >
+          <input
+            type="file"
+            id="imageInput"
+            name="image"
+            accept="image/*"
+            onchange="previewImage(event)"
+          />
+          <img
+            id="preview"
+            class="preview"
+            src="{{ image_url if image_url else '' }}"
+            alt="Preview Gambar"
+          />
+          <button type="submit">🔍 Prediksi Sekarang</button>
+        </form>
+      </center>
+
+      {% if result %} {% set conf_warna =
+      result.confidence['warna'][result.fitur['warna']] %} {% set conf_tekstur =
+      result.confidence['tekstur'][result.fitur['tekstur']] %} {% set
+      conf_lokasi = result.confidence['lokasi'][result.fitur['lokasi']] %} {% if
+      result.luka == 'ya' %} {% set conf_luka =
+      result.confidence['luka']['luka'] %} {% elif 'tidak' in
+      result.confidence['luka'] %} {% set conf_luka =
+      result.confidence['luka']['tidak'] %} {% else %} {% set conf_luka = 0 %}
+      {% endif %} {% set fitur_rendah = [] %} {% if conf_warna < 60 %} {% set _
+      = fitur_rendah.append('warna (' ~ conf_warna ~ '%)') %} {% endif %} {% if
+      conf_tekstur < 60 %} {% set _ = fitur_rendah.append('tekstur (' ~
+      conf_tekstur ~ '%)') %} {% endif %} {% if conf_lokasi < 60 %} {% set _ =
+      fitur_rendah.append('lokasi (' ~ conf_lokasi ~ '%)') %} {% endif %} {% if
+      conf_luka < 60 %} {% set _ = fitur_rendah.append('luka (' ~ conf_luka ~
+      '%)') %} {% endif %} {% if fitur_rendah|length == 0 %}
+      <div class="result-container">
+        <div class="box">
+          <h3>🧬 Karakteristik Citra</h3>
+          <p>• Warna: {{ result.fitur['warna'] }} ({{ conf_warna }}%)</p>
+          <p>• Tekstur: {{ result.fitur['tekstur'] }} ({{ conf_tekstur }}%)</p>
+          <p>• Lokasi: {{ result.fitur['lokasi'] }} ({{ conf_lokasi }}%)</p>
+          <p>• Luka: {{ result.luka }} ({{ conf_luka }}%)</p>
+        </div>
+
+        <div class="box">
+          <h3>🩺 Hasil Prediksi</h3>
+          <p><strong>Penyakit: {{ result.diagnosis.upper() }}</strong></p>
+        </div>
+
+        <div class="box">
+          <h3>💡 Saran Penanganan</h3>
+          <ul>
+            <li>
+                {% for langkah in result.rekomendasi %}
+                {{ langkah }}
+                {% endfor %}
+            </li>
+          </ul>
+        </div>
+      </div>
+      {% else %}
+      <div class="box">
+        <h3>❌ Hasil Tidak Valid</h3>
+        <p>
+          Probabilitas terlalu rendah (Fitur {{ fitur_rendah | join(', ')
+          }}).<br />
+          Silakan unggah gambar luka yang lebih jelas atau relevan dengan kasus.
+        </p>
+      </div>
+      {% endif %} {% endif %}
+    </div>
+
+    <script>
+      function previewImage(event) {
+        const preview = document.getElementById("preview");
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>
+  </body>
+</html>
