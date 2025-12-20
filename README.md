@@ -75,3 +75,6 @@ The system works in two main stages:
 
 ## 🏗️ INTERFACE
 
+<img src="UI/hu.png" alt="Main Interface" width="800"/>
+
+<img src="UI/cek.png" alt="Prediction Result" width="800"/>
