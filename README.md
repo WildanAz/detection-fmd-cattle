@@ -1,80 +1,103 @@
-# 🐄 Cow Disease Detection & Prediction System
+# 🐄 Cattle Disease Detection & Prediction System
 
-A web-based machine learning application for detecting and predicting cattle diseases from wound images.  
-The system integrates **computer vision**, **machine learning**, and a **Flask web application** to assist early disease identification in cattle.
+A web-based machine learning application for detecting **Foot-and-Mouth Disease (FMD)** and other cattle diseases from wound images — built as a real-world solution to assist early disease identification for farmers and veterinarians.
 
----
-
-## 📌 Project Overview
-
-This project aims to help identify cattle diseases by analyzing wound images and extracted visual features.  
-The system works in two main stages:
-
-1. **Feature Detection (Computer Vision)**  
-   - Color  
-   - Texture  
-   - Wound location  
-   - Presence of wound  
-
-2. **Disease Classification (Machine Learning)**  
-   - Support Vector Machine (SVM) classifier  
-   - StandardScaler for feature normalization  
-   - Rule-based post-processing for logical consistency  
+> 🏆 Final thesis project | Universitas Komputer Indonesia | 2025  
+> ✅ Achieved **95% classification accuracy** | Trained on **500+ images** | Deployed to production via Render
 
 ---
 
-## 🧠 Machine Learning Approach
+## 🎯 Problem Statement
 
-- **Feature Extraction**:  
-  Azure Custom Vision (image-based classification for visual features)
+Foot-and-mouth disease (PMK) is one of the most devastating livestock diseases in Indonesia, causing massive economic losses for farmers. Early detection is critical — but access to veterinary diagnosis is limited, especially in rural areas.
 
-- **Classifier**:  
-  Support Vector Machine (SVM)
+This system provides an accessible, image-based diagnostic tool that can be used directly from a web browser.
 
-- **Target Classes**:
-  - PMK (Foot-and-Mouth Disease)
-  - Foot Rot
-  - Necrotic Stomatitis
-  - Healthy
+---
 
-- **Post-processing Rules**:
-  - Logical correction based on wound presence
-  - Confidence-based label adjustment
+## 🧠 How It Works
+
+The system uses a **two-stage pipeline**:
+
+1. **Feature Extraction (Azure Custom Vision)**
+   - Analyzes wound images for color, texture, wound location, and presence of wound
+   - Trained on 500+ labeled cattle images
+
+2. **Disease Classification (SVM)**
+   - Support Vector Machine classifier with StandardScaler normalization
+   - Rule-based post-processing for logical consistency
+   - Classifies into 4 categories:
+     - PMK / Foot-and-Mouth Disease
+     - Foot Rot
+     - Necrotic Stomatitis
+     - Healthy
+
+---
+
+## 📊 Results
+
+| Metric | Score |
+|--------|-------|
+| Classification Accuracy | **95%** |
+| Computer Vision Model Accuracy | **90% (avg)** |
+| Training Images | **500+** |
+| Deployment | **Flask + Render (Production)** |
+
+---
+
+## 🖥️ Interface
+
+![Main Interface](UI/hu.png)
+![Prediction Result](UI/cek.png)
 
 ---
 
 ## 🏗️ Project Structure
 
-```text
+```
 .
 ├── app/
-│   ├── __init__.py
 │   ├── config.py          # Configuration & constants
 │   ├── ml_service.py      # ML logic & prediction pipeline
 │   └── routes.py          # Flask routes
-│
 ├── models/
 │   ├── SVM_linear.pkl
 │   └── scaler.pkl
-│
-├── notebook/
-│   └── Diagnosis_Penyakit_Sapi.ipynb
-│
 ├── static/
-│   ├── uploads/           # Runtime image uploads (ignored in git)
 │   └── style.css
-│
 ├── templates/
 │   └── index.html
-│
-├── .gitignore
 ├── app.py                 # Flask entry point
 └── README.md
 ```
 ---
 
-## 🏗️ INTERFACE
+## ⚙️ Tech Stack
 
-<img src="UI/hu.png" alt="Main Interface" width="800"/>
+`Python` • `Scikit-learn` • `Azure Custom Vision` • `Flask` • `Pandas` • `NumPy` • `Render`
 
-<img src="UI/cek.png" alt="Prediction Result" width="800"/>
+---
+
+## 🚀 How to Run Locally
+
+```bash
+# Clone the repo
+git clone https://github.com/WildanAz/detection-fmd-cattle.git
+cd detection-fmd-cattle
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the app
+python app.py
+```
+
+> **Note:** Azure Custom Vision API key required for feature extraction. Set your credentials in `app/config.py`.
+
+---
+
+## 💡 Key Learnings
+
+- End-to-end ML pipeline from data collection to production deployment
+- Integrating cloud-based computer vision (Azure) with custom ML classifiers
+- Handling real-world constraints: limited labeled data, class imbalance, deployment on free-tier hosting
